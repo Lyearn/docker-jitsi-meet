@@ -14,12 +14,12 @@ fi
 # On environments like Swarm the IP address used by the default gateway need not be
 # the one used for inter-container traffic. Use that one for our fallback ID.
 XMPP_SERVER_IP=$(dig +short +search ${XMPP_SERVER})
-export JVB_WS_SERVER_ID_FALLBACK=$(ip route get ${XMPP_SERVER_IP} | grep -oP '(?<=src ).*' | awk '{ print $1 '})
+export JVB_WS_SERVER_ID_FALLBACK=$(/sbin/ip route get ${XMPP_SERVER_IP} | grep -oP '(?<=src ).*' | awk '{ print $1 '})
 
 # Local IP for the ice4j mapping harvester.
-export LOCAL_ADDRESS=$(ip route get 1 | grep -oP '(?<=src ).*' | awk '{ print $1 '})
+export LOCAL_ADDRESS=$(/sbin/ip route get 1 | grep -oP '(?<=src ).*' | awk '{ print $1 '})
 
-export SENTRY_RELEASE="${SENTRY_RELEASE:-$(apt-cache policy jitsi-videobridge2 | sed -n '/Installed/p' | sed -e 's/[^:]*: //')}"
+# export SENTRY_RELEASE="${SENTRY_RELEASE:-$(apt-cache policy jitsi-videobridge2 | sed -n '/Installed/p' | sed -e 's/[^:]*: //')}"
 
 if [[ -f /config/custom-sip-communicator.properties ]]; then
     cat /config/custom-sip-communicator.properties > /config/sip-communicator.properties
